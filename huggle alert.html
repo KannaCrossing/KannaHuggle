@@ -1,0 +1,77 @@
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<style>
+
+body {
+	font-family: "Comic Sans MS", cursive;
+}
+
+h1 {
+	font-size: 245px;
+	color: black;
+	-webkit-text-fill-color: purple; /* Will override color (regardless of order) */
+	-webkit-text-stroke-width: 5px;
+	-webkit-text-stroke-color: white;
+}
+
+.fader {  
+	opacity: 0;
+	transition: opacity 1s linear;
+}
+
+.show {
+	opacity: 1;
+}
+
+</style>
+
+<h1 id="huggleAlert" class="fader"><img src="huggle notif.png" alt="hug"></h1>
+
+
+<script>
+
+let socket = new WebSocket("wss://temp.jdf2.org/?secret=brCwP0fbWDPey4lO8n8cZVwUY7V1N5qg");
+
+socket.onopen = function(e) {
+  console.log("[open] Connection established");
+showAlert();
+};
+
+
+socket.onmessage = function(event) {
+  console.log(`[message] Data received from server: ${event.data}`);
+	showAlert();
+};
+
+
+socket.onclose = function(event) {
+  if (event.wasClean) {
+    console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+  } else {
+    // e.g. server process killed or network down
+    // event.code is usually 1006 in this case
+    console.log('[close] Connection died');
+  }
+};
+
+socket.onerror = function(error) {
+  alert(`[error] ${error.message}`);
+};
+
+function showAlert() {
+	$("#huggleAlert").addClass('show');
+		setTimeout(function(){
+		
+		$("#huggleAlert").removeClass('show');
+		i++;
+		
+	},9000);
+}
+
+</script>
+</body>
+</html>
